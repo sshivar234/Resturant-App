@@ -51,6 +51,43 @@ export class RestaurantController {
     }
   }
 
+  // Create restaurant
+  async createRestaurant(req: Request, res: Response): Promise<void> {
+    try {
+      const data = req.body;
+      
+      // Validate required fields
+      const requiredFields = ['name', 'cuisine', 'imageUrl', 'location', 'rating', 'priceRange'];
+      for (const field of requiredFields) {
+        if (!data[field]) {
+          res.status(400).json({ error: `${field} is required` });
+          return;
+        }
+      }
+      
+      // Validate rating range
+      if (data.rating && (data.rating < 1 || data.rating > 5)) {
+        res.status(400).json({ error: 'Rating must be between 1 and 5' });
+        return;
+      }
+      
+      // Validate price range format
+      const isValidOldFormat = ['$', '$$', '$$$'].includes(data.priceRange);
+      const isValidNewFormat = /^\$\d+$/.test(data.priceRange);
+      
+      if (!isValidOldFormat && !isValidNewFormat) {
+        res.status(400).json({ error: 'Price range must be $, $$, $$$, or specific amount like $25' });
+        return;
+      }
+      
+      const restaurant = await restaurantService.createRestaurant(data);
+      res.status(201).json(restaurant);
+    } catch (error) {
+      console.error('Error creating restaurant:', error);
+      res.status(500).json({ error: 'Failed to create restaurant' });
+    }
+  }
+
 
 
   // Update restaurant

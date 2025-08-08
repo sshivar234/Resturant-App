@@ -6,6 +6,7 @@ const restaurantController = new RestaurantController();
 
 // Basic CRUD routes
 router.get('/', restaurantController.getAllRestaurants.bind(restaurantController));
+router.post('/', restaurantController.createRestaurant.bind(restaurantController));
 
 // Special routes (must come before /:id route)
 router.get('/top-rated', restaurantController.getTopRatedRestaurants.bind(restaurantController));

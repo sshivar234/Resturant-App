@@ -113,7 +113,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
              }}
              loading="lazy"
              style={{
-               minHeight: '192px', // 48 * 4 = 192px (h-48)
+               minHeight: '192px',
                objectFit: 'cover',
                objectPosition: 'center'
              }}

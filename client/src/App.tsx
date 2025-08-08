@@ -3,6 +3,7 @@ import { Header } from './components/Header';
 import { Filter } from './components/Filter';
 import { RestaurantList } from './components/RestaurantList';
 import { Pagination } from './components/Pagination';
+import { AddRestaurantModal } from './components/AddRestaurantModal';
 import { useRestaurants } from './hooks/useRestaurants';
 
 function App() {
@@ -17,12 +18,14 @@ function App() {
     setFilters,
     updateRestaurant,
     deleteRestaurant,
+    createRestaurant,
     searchRestaurants,
     fetchRestaurants,
     clearError,
   } = useRestaurants();
 
   const [isSearching, setIsSearching] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const handleSearch = async (query: string) => {
     if (query.trim()) {
@@ -65,6 +68,14 @@ function App() {
     setFilters(prev => ({ ...prev, page }));
   };
 
+  const handleCreateRestaurant = async (data: any) => {
+    try {
+      await createRestaurant(data);
+    } catch (err) {
+      console.error('Failed to create restaurant:', err);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header onSearch={handleSearch} onGoHome={handleGoHome} />
@@ -100,18 +111,29 @@ function App() {
           locations={locations}
         />
 
-        {/* Results count */}
+        {/* Results count and Add button */}
         <div className="mb-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-gray-800">
               {isSearching ? 'Search Results' : 'All Restaurants'}
             </h2>
-            <span className="text-gray-600">
-              {loading ? 'Loading...' : pagination 
-                ? `${pagination.totalItems} restaurant${pagination.totalItems !== 1 ? 's' : ''} (Page ${pagination.currentPage} of ${pagination.totalPages})`
-                : `${restaurants.length} restaurant${restaurants.length !== 1 ? 's' : ''}`
-              }
-            </span>
+            <div className="flex items-center space-x-4">
+              <span className="text-gray-600">
+                {loading ? 'Loading...' : pagination 
+                  ? `${pagination.totalItems} restaurant${pagination.totalItems !== 1 ? 's' : ''} (Page ${pagination.currentPage} of ${pagination.totalPages})`
+                  : `${restaurants.length} restaurant${restaurants.length !== 1 ? 's' : ''}`
+                }
+              </span>
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors flex items-center space-x-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                <span>Add Restaurant</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -133,6 +155,15 @@ function App() {
             hasPreviousPage={pagination.hasPreviousPage}
           />
         )}
+
+        {/* Add Restaurant Modal */}
+        <AddRestaurantModal
+          isOpen={showAddModal}
+          onClose={() => setShowAddModal(false)}
+          onSubmit={handleCreateRestaurant}
+          cuisines={cuisines}
+          locations={locations}
+        />
       </main>
 
       {/* Footer */}

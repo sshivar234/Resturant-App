@@ -91,6 +91,13 @@ export class RestaurantService {
     });
   }
 
+  // Create restaurant
+  async createRestaurant(data: Omit<Restaurant, 'id' | 'createdAt' | 'updatedAt'>): Promise<Restaurant> {
+    return await prisma.restaurant.create({
+      data
+    });
+  }
+
 
 
   // Update restaurant

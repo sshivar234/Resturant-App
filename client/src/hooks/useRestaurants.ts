@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { apiService } from '../services/api';
-import type { Restaurant, UpdateRestaurantInput, RestaurantFilters, PaginatedResponse } from '../types/restaurant';
+import type { Restaurant, UpdateRestaurantInput, CreateRestaurantInput, RestaurantFilters, PaginatedResponse } from '../types/restaurant';
 
 export const useRestaurants = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
@@ -54,6 +54,18 @@ export const useRestaurants = () => {
       setRestaurants(prev => prev.filter(restaurant => restaurant.id !== id));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete restaurant');
+      throw err;
+    }
+  };
+
+  // Create restaurant
+  const createRestaurant = async (data: CreateRestaurantInput) => {
+    try {
+      const newRestaurant = await apiService.createRestaurant(data);
+      setRestaurants(prev => [newRestaurant, ...prev]); // Add to beginning of list
+      return newRestaurant;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create restaurant');
       throw err;
     }
   };
@@ -121,6 +133,7 @@ export const useRestaurants = () => {
     setFilters,
     updateRestaurant,
     deleteRestaurant,
+    createRestaurant,
     searchRestaurants,
     fetchRestaurants,
     clearError: () => setError(null),

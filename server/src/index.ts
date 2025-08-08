@@ -32,6 +32,7 @@ app.listen(PORT, () => {
   console.log(`  API endpoints:`);
   console.log(`   GET  /api/health`);
   console.log(`   GET  /api/restaurants`);
+  console.log(`   POST /api/restaurants`);
   console.log(`   GET  /api/restaurants/:id`);
   console.log(`   PUT  /api/restaurants/:id`);
   console.log(`   DELETE /api/restaurants/:id`);

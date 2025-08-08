@@ -23,6 +23,16 @@ export interface UpdateRestaurantInput {
   priceRange?: string;
 }
 
+export interface CreateRestaurantInput {
+  name: string;
+  cuisine: string;
+  imageUrl: string;
+  location: string;
+  rating: number;
+  description?: string;
+  priceRange: string;
+}
+
 export interface RestaurantFilters {
   cuisine?: string;
   location?: string;

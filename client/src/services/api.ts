@@ -1,4 +1,4 @@
-import type { Restaurant, UpdateRestaurantInput, RestaurantFilters, PaginatedResponse } from '../types/restaurant';
+import type { Restaurant, UpdateRestaurantInput, CreateRestaurantInput, RestaurantFilters, PaginatedResponse } from '../types/restaurant';
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
@@ -39,6 +39,14 @@ class ApiService {
   // Get restaurant by ID
   async getRestaurant(id: number): Promise<Restaurant> {
     return this.request<Restaurant>(`/restaurants/${id}`);
+  }
+
+  // Create restaurant
+  async createRestaurant(data: CreateRestaurantInput): Promise<Restaurant> {
+    return this.request<Restaurant>('/restaurants', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   }
 
 
